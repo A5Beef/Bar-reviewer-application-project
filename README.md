@@ -9,10 +9,11 @@ Voisi sinäänsä olla jopa indeksinä sijainnin tuotteiden hinnalle.....?
 
 
 Bisse sovellus
-- Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
-- Käyttäjä pystyy lisäämään sovellukseen tietokohteita. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään tietokohteita.
-- Käyttäjä näkee sovellukseen lisätyt tietokohteet. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät tietokohteet.
-- Käyttäjä pystyy etsimään tietokohteita hakusanalla tai muulla perusteella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä tietokohteita.
-- Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät tietokohteet.
-- Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
-- Sovelluksessa on pääasiallisen tietokohteen lisäksi toissijainen tietokohde, joka täydentää pääasiallista tietokohdetta. Käyttäjä pystyy lisäämään toissijaisia tietokohteita omiin ja muiden käyttäjien tietokohteisiin liittyen.
+- Sovelluksessa on kartta, johon käyttäjät voi lisätä baareja. Tähän pitäisi sitten vielä olla joku systeemi vahinko inputeille, sulkeutuneille baareille, etc..
+- Kartassa kun painelee sijainteja, niin voi nähdä baarin hanatuotteiden hintoja.
+- Käyttäjät voivat luoda tunnuksen ja kirjautumaan sisään, vain rekisteröidyt käyttäjät voivat lisätä baareja ja muutella tuotteiden hintoja.
+- Sovelluksessa voi etsiä baarin nimiä.
+- Sovelluksessa voi katsoa käyttäjäsivua, josta näkee paljon käyttäjä on "kontribuoinut". määrä lisätyistä baareista, hintojen muutoksista, hintojen tarkkuudesta... Käyttäjä sivuissa voi olla myös esim. käyttäjä rating.
+- Sovelluksissa voisi olla "opiskelija ystävälliset" baarit eri merkkauksilla. Esim. hyväksyvät haalarit sisään, opiskelija alennukset, haalarimerkkien myynti
+- Sijaintien hanajuomissa, myös minkä panimon tuotteita, tai useammankin, juoman tilavuus (koko). (Hartwall, koff.....)
+- Sijainteihin voi jättää kommentteja ja arvosteluita...? Ja niiden keskiarvosana.
