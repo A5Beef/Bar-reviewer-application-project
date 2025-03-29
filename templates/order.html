@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Uusi sijainti</title>
+</head>
+
+<body>
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/">Sijainnit</a> 
+    <a href="/newlocation">Uusi sijainti</a> 
+  </p>
+
+  <p> Uusi sijainti </p>
+  <br/>
+
+  <form action="/result" method="post">
+    <p>Hanajuomat:</p>
+
+    <!--KALJAA -->
+    <p>
+      <input type="radio" name="Beer" value="Beer" /> Kalja <br/>
+
+      <input type="checkbox" name="bsize" value="0.33/0.4" /> pieni (0.33 / 0.4)
+      <input type="text" name="bprice" placeholder="4.00"/> (€)<br /> 
+
+      <input type="checkbox" name="bsize" value="0.5" /> iso (0.5 l)
+      <input type="text" name="bprice" placeholder="5.80"/> (€)<br />
+    </p>
+
+    <!--LONKERO -->
+    <p>
+      <input type="radio" name="Lonkero" value="Lonkero" /> Lonkero <br/>
+
+      <input type="checkbox" name="lsize" value="0.33" /> pieni (0.33)
+      <input type="text" name="lprice" placeholder="5.50"/> (€)<br /> 
+
+      <input type="checkbox" name="lsize" value="0.5" /> iso (0.5)
+      <input type="text" name="lprice" placeholder="8.00"/> (€)<br />
+    </p>
+
+    <!-- Ananas / muut..? -->
+    <p>
+      <input type="radio" name="Ananas" value="Ananas" /> Ananas Lonkero (tai muu maku lonkero) <br/>
+
+      <input type="checkbox" name="asize" value="0.33" /> pieni (0.33)
+      <input type="text" name="aprice" placeholder="5.50"/> (€)<br /> 
+
+      <input type="checkbox" name="asize" value="0.5" /> iso (0.5)
+      <input type="text" name="aprice" placeholder="8.00"/> (€)<br />
+    </p>
+
+    <!--Siideri -->
+    <p>
+      <input type="radio" name="Cider" value="Cider" /> Siideri <br/>
+
+      <input type="checkbox" name="csize" value="0.33" /> pieni (0.33)
+      <input type="text" name="cprice" placeholder="5.00"/> (€)<br /> 
+
+      <input type="checkbox" name="csize" value="0.5" /> iso (0.5)
+      <input type="text" name="cprice" placeholder="7.00"/> (€)<br />
+    </p>
+
+
+    <br />
+    <p>Edut/plussat:</p>
+    <p>
+      <input type="checkbox" name="extra" value="happyhour" /> Happy hour
+      <input type="checkbox" name="extra" value="student" /> Opiskelija-alennus
+      <input type="checkbox" name="extra" value="gluten" /> Gluteeniton kalja
+      <input type="checkbox" name="extra" value="patch" /> Haalarimerkki
+    </p>
+
+    <br />  
+    <p>Lisätietoa (mikä panimo hanoissa, % ale, happyhour ajat, speciaalit, jne): <br />
+      <textarea name="extrainfo" rows="5" cols="70" placeholder= "Hartwallin auraa lonkku happyjoe, 50 senttiä opiskelija-ale / 10%,
+löytyy litran bisse, appelsiinilonkeroa saa hanasta,
+redbullii ja ed energiajuomat, kivat baarimikot ja hyvät vibez"></textarea>
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
+
+
+
+</body>
+
+</html>
