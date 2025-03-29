@@ -17,3 +17,8 @@ Bisse sovellus
 - Sovelluksissa voisi olla "opiskelija ystävälliset" baarit eri merkkauksilla. Esim. hyväksyvät haalarit sisään, opiskelija alennukset, haalarimerkkien myynti
 - Sijaintien hanajuomissa, myös minkä panimon tuotteita, tai useammankin, juoman tilavuus (koko). (Hartwall, koff.....)
 - Sijainteihin voi jättää kommentteja ja arvosteluita...? Ja niiden keskiarvosana.
+
+
+Edit: 29.3
+
+Kartan implementointi vaikuttaa nyt tosi vaikeelta. Ehkä vaihdan projektia niin, että se toimii ilman karttaa. Sovelluksessa voi nyt kirjautua sisään, rekisteröityä, kirjautua ulos. Sivustoissa lisätty sidebar/navigointi hommeli josta voi päästä sivulta toiseen. Sovelluksessa on sivu, jossa voi luoda uuden tietokohteen, mutta tietokohdetta ei lisätä tietokantaan, eikä sitä voi muokata/poistaa/lähettää (on vain sivusto). Luonti sivu on vaikea, paljon vaihoehtoja hanajuomista. Mietityttää, että olisiko jotenkin järkevämmin voinut laittaa noi ja vielä niin, että olisi helppo implementoida tuo tietokantaan...
