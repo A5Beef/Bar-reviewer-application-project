@@ -22,3 +22,14 @@ Bisse sovellus
 Edit: 29.3
 
 Kartan implementointi vaikuttaa nyt tosi vaikeelta. Ehkä vaihdan projektia niin, että se toimii ilman karttaa. Sovelluksessa voi nyt kirjautua sisään, rekisteröityä, kirjautua ulos. Sivustoissa lisätty sidebar/navigointi hommeli josta voi päästä sivulta toiseen. Sovelluksessa on sivu, jossa voi luoda uuden tietokohteen, mutta tietokohdetta ei lisätä tietokantaan, eikä sitä voi muokata/poistaa/lähettää (on vain sivusto). Luonti sivu on vaikea, paljon vaihoehtoja hanajuomista. Mietityttää, että olisiko jotenkin järkevämmin voinut laittaa noi ja vielä niin, että olisi helppo implementoida tuo tietokantaan...
+
+
+edit 30.3
+
+Yritin saada tietokannan toimimaan... Ehkä toimii. Tietokohteita voi lisätä, mutta result page eli sellanen recappi siitä mitä on lisännyt ei toimi kunnolla. Vaikuttaa ainakin siltä, että tietokantaan menevät kuitenkin tiedot, onkohan rakenteesta kiinni. Tietokohteita ei voi nähdä vielä, ei voi muokata eikä poistaa. Ei myöskään voi hakea tai lajitella tai mitenkään. Yötöissä yritin taistella sovelluksen kanssa ja saamaan toimimaan, tuntuu siltä että tein siitä vain hankalemman ja koodi on nyt jotenkin tosi vaikea...
+
+Mitä vielä haluaisin ehkä lisätä:
+- lempi lokaatiot/baarit
+- rating
+- lajittelu systeemi, hinta/rating/...
+
