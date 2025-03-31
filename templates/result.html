@@ -12,21 +12,26 @@
     <a href="/newlocation">Uusi sijainti</a> 
   </p>
 
-  <p> Annoit seuraavat tiedot {{ Beer }}</p>
+  <p>Lisätty {{ barname }} - {{baraddress}}</p>
+  
+  <p>Juomat:</p>
+  <ul>
+    {% for drink, data in drinks.items() %}
+      {% if data.selected %}
+        <li>
+          <strong>{{ drink|capitalize }}:</strong>
+          <ul>
+            {% for i in range(data.sizes|length) %}
+              {% if data.sizes[i] and data.prices[i] %}
+                <li>{{ data.sizes[i] }} - {{ data.prices[i] }} €</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
 
-  {% if bsizes and bprices %}
-  <p>
-    Kalja:
-    <ul>
-      {% for size in bsizes %}
-      <li>{{ size }}L,  {{ bprices[loop.index0] }} € </li>
-      {% endfor %}
-
-    </ul>
-
-   
-  </p>
-  {% endif %}
 
 
 

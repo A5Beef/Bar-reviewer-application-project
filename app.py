@@ -3,7 +3,7 @@ from flask import Flask
 from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
-import config
+import config, location
 
 
 app = Flask(__name__)
@@ -22,31 +22,72 @@ def order():
 
 @app.route("/result", methods=["POST"])
 def result(): 
-    bisse = request.form.get("Beer", "")
-    bsizes = request.form.getlist("bsize")
-    bprices = request.form.getlist("bprice")
+    try:
+        if "user_id" not in session:
+            return redirect("/login")
 
-    lonkero = request.form.get("Lonkero", "")
-    lsizes = request.form.getlist("lsize")
-    lprices = request.form.getlist("lprice")
+  
+        barname = request.form.get("barname")
+        baraddress= request.form.get("address")
+        extras = request.form.getlist("extra")
+        extrainfo = request.form.get("extrainfo", "")
 
-    ananas = request.form.get("Ananas", "")
-    asizes = request.form.getlist("asize")
-    aprices = request.form.getlist("aprice")
+        drinks = {
+            'beer': {
+                'selected': request.form.get("Beer") == "on",
+                'sizes': request.form.getlist("bsize"),
+                'prices': request.form.getlist("bprice")
+            },
+            'lonkero': {
+                'selected': request.form.get("Lonkero") == "on",
+                'sizes': request.form.getlist("lsize"),
+                'prices': request.form.getlist("lprice")
+            },
+            'ananas': {
+                'selected': request.form.get("Ananas") == "on",
+                'sizes': request.form.getlist("asize"),
+                'prices': request.form.getlist("aprice")
+            },
+            'cider': {
+                'selected': request.form.get("Cider") == "on",
+                'sizes': request.form.getlist("csize"),
+                'prices': request.form.getlist("cprice")
+            }
+        }
 
-    cider = request.form.get("Cider", "")
-    csizes = request.form.getlist("csize")
-    cprices = request.form.getlist("cprice")
 
 
-    extras = request.form.getlist("extra")
-    extrainfo = request.form.get("extrainfo", "")
+        newlocation_id = location.add_location(barname=barname, baraddress=baraddress,
+        user_id=session["user_id"],
+        happyhour=1 if 'happyhour' in extras else 0,
+        student_discount=1 if 'student' in extras else 0,
+        gluten_free=1 if 'gluten' in extras else 0,
+        student_patch=1 if 'patch' in extras else 0,
+        extra_info=extrainfo )
 
-    return render_template("result.html", bisse=bisse,  bsizes=bsizes, bprices=bprices,
-    lonkero=lonkero, lsizes=lsizes, lprices=lprices,
-    ananas=ananas, asizes=asizes, aprices=aprices,
-    cider=cider, csizes=csizes, cprices=cprices,
-    extrainfo=extrainfo, extras=extras)
+        drink_results = {}
+        for drink_type, data in drinks.items():
+            if data['selected']:
+                drink_results[drink_type] = list(zip(data['sizes'], data['prices']))
+
+        
+
+        return render_template(
+            "result.html",
+            barname=barname,
+            baraddress=baraddress,
+            drinks=drink_results,
+            extras=extras,
+            extrainfo=extrainfo)
+
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return "An error occurred", 500
+    
+
+
+
 
 
 # kirjautimen rekisteröinti
@@ -80,21 +121,22 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
     
-    sql = "SELECT password_hash FROM users WHERE username = ?"
-    password_hash = db.query(sql, [username])[0][0]
-
+    sql = "SELECT id, password_hash FROM users WHERE username = ?"  
+    result = db.query(sql, [username])
+    
+    if not result:
+        return "VIRHE: väärä tunnus tai salasana"
+        
+    user_id, password_hash = result[0]
+    
     if check_password_hash(password_hash, password):
         session["username"] = username
+        session["user_id"] = user_id  
         return redirect("/")
     else:
         return "VIRHE: väärä tunnus tai salasana"
-    
 
 @app.route("/logout")
 def logout():
-    del session["username"]
+    session.clear()  
     return redirect("/")
-
-
-
-
