@@ -4,13 +4,12 @@ CREATE TABLE users (
     password_hash TEXT
 );
 
-
 CREATE TABLE locations (
     id INTEGER PRIMARY KEY,
-    barname TEXT NOT NULL,
-    baraddress TEXT NOT NULL,
-    user_id INTEGER REFERENCES users,
-    happyhour BOOLEAN DEFAULT 0,
+    bar_name TEXT NOT NULL,
+    bar_address TEXT NOT NULL,
+    user_id INTEGER REFERENCES users(id),
+    happy_hour BOOLEAN DEFAULT 0,
     student_discount BOOLEAN DEFAULT 0,
     gluten_free BOOLEAN DEFAULT 0,
     student_patch BOOLEAN DEFAULT 0,

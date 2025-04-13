@@ -14,11 +14,11 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
-
 # Uusi tietokohde, ja sen tulos
-@app.route("/newlocation")
+@app.route("/new_location")
 def order():
     return render_template("order.html")
+
 
 @app.route("/result", methods=["POST"])
 def result(): 
@@ -26,72 +26,59 @@ def result():
         if "user_id" not in session:
             return redirect("/login")
 
-  
-        barname = request.form.get("barname")
-        baraddress= request.form.get("address")
+        bar_name = request.form.get("bar_name")
+        bar_address= request.form.get("bar_address")
         extras = request.form.getlist("extra")
-        extrainfo = request.form.get("extrainfo", "")
+        extra_info = request.form.get("extra_info", "")
 
         drinks = {
             'beer': {
-                'selected': request.form.get("Beer") == "on",
+                'selected': request.form.get("beer") == "on",
                 'sizes': request.form.getlist("bsize"),
                 'prices': request.form.getlist("bprice")
             },
             'lonkero': {
-                'selected': request.form.get("Lonkero") == "on",
+                'selected': request.form.get("lonkero") == "on",
                 'sizes': request.form.getlist("lsize"),
                 'prices': request.form.getlist("lprice")
             },
             'ananas': {
-                'selected': request.form.get("Ananas") == "on",
+                'selected': request.form.get("ananas") == "on",
                 'sizes': request.form.getlist("asize"),
                 'prices': request.form.getlist("aprice")
             },
             'cider': {
-                'selected': request.form.get("Cider") == "on",
+                'selected': request.form.get("cider") == "on",
                 'sizes': request.form.getlist("csize"),
                 'prices': request.form.getlist("cprice")
             }
         }
 
-
-
-        newlocation_id = location.add_location(barname=barname, baraddress=baraddress,
+        new_location_id = location.add_location(bar_name=bar_name, bar_address=bar_address,
         user_id=session["user_id"],
-        happyhour=1 if 'happyhour' in extras else 0,
-        student_discount=1 if 'student' in extras else 0,
-        gluten_free=1 if 'gluten' in extras else 0,
-        student_patch=1 if 'patch' in extras else 0,
-        extra_info=extrainfo )
+        happy_hour=1 if 'happy_hour' in extras else 0,
+        student_discount=1 if 'student_discount' in extras else 0,
+        gluten_free=1 if 'gluten_free' in extras else 0,
+        student_patch=1 if 'student_patch' in extras else 0,
+        extra_info=extra_info )
 
-        drink_results = {}
         for drink_type, data in drinks.items():
-            if data['selected']:
-                drink_results[drink_type] = list(zip(data['sizes'], data['prices']))
-
-        
+            data["pairs"] = list(zip(data["sizes"], data["prices"]))
 
         return render_template(
             "result.html",
-            barname=barname,
-            baraddress=baraddress,
-            drinks=drink_results,
+            bar_name=bar_name,
+            bar_address=bar_address,
+            drinks=drinks,
             extras=extras,
-            extrainfo=extrainfo)
-
+            extra_info=extra_info)
 
     except Exception as e:
         print(f"Error: {str(e)}")
         return "An error occurred", 500
     
 
-
-
-
-
 # kirjautimen rekisteröinti
-
 
 @app.route("/register")
 def register():
@@ -113,7 +100,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return "Tunnus luotu"
+    return render_template("account_created.html")
 
 
 @app.route("/login", methods=["POST"])

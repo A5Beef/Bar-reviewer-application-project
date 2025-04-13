@@ -1,10 +1,10 @@
 import db
 
 
-def add_location(barname, baraddress, user_id, happyhour, student_discount, gluten_free, student_patch, extra_info):
+def add_location(bar_name, bar_address, user_id, happy_hour, student_discount, gluten_free, student_patch, extra_info):
     sql= """INSERT INTO locations
-      (barname, baraddress, user_id, happyhour, student_discount, gluten_free, student_patch, extra_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
-    db.execute(sql, [barname, baraddress, user_id, happyhour, student_discount, gluten_free, student_patch, extra_info])
+      (bar_name, bar_address, user_id, happy_hour, student_discount, gluten_free, student_patch, extra_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [bar_name, bar_address, user_id, happy_hour, student_discount, gluten_free, student_patch, extra_info])
     location_id = db.last_insert_id()
     #add drink...? price..?
     return location_id
@@ -24,7 +24,6 @@ def add_price(location_id, drink_id, drink_size, price):
     sql =  """INSERT INTO price
     (location_id, drink_id, drink_size, price) VALUES (?, ?, ?, ?)"""
     db.execute(sql, [location_id, drink_id, drink_size, price])
-
 
 def update_drink_price(location_id, drink_id, drink_size, new_price):
     sql = """UPDATE price
