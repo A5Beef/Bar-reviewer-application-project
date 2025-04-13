@@ -1,8 +1,6 @@
 # Tietokannat-ja-web-ohjelmointi-projekti
 
-Moi testi
-
-projekti aihe:
+Projekti aihe:
 Joku sovellus, jossa olisi kartta hanakaljan hinnoista. Käyttäjät pääsisi lisäämään baareja/klubeja/ravintoloita ja niissä olevien hanakaljojen hinnan. Niissä voi myös kategoroida minkä merkkistä kaljaa on, esim koffin/hartwallin tuotteet tai jotai sellasta.
 Voisi sinäänsä olla jopa indeksinä sijainnin tuotteiden hinnalle.....?
 
@@ -33,3 +31,6 @@ Mitä vielä haluaisin ehkä lisätä:
 - rating
 - lajittelu systeemi, hinta/rating/...
 
+13.4
+
+Ei paljon muutoksia, henkilökohtaisista syistä + muutto
