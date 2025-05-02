@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{thread.bar_name}}</title>
+</head>
+
+<body>
+  <p>
+    Baarisivu
+  </p>
+ 
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/new_location">Uusi sijainti</a> 
+    <a href="/logout">Kirjaudu ulos</a> 
+  </p>
+
+  <p>
+    Baari: {{thread.bar_name}} <br />
+    Osoite: {{thread.bar_address}} <br />
+    Luonut käyttäjä: under maintanace <br />
+  </p>
+  <br />
+
+  <p>
+    Baarin hanajuomat:
+    
+
+  </p>
+
+  <hr />
+
+   <!-- show comments-->
+  {% for comment in comments %}
+  <p>
+    {{ comment.username }} ({{ comment.sent_at }}):
+  </p>
+  <p>
+    {{ comment.content }}
+  </p>
+   <!-- show actions if user made comment-->
+  {% if comment.user_id == session.user_id %}
+  <p>
+    <a href="/edit/{{ comment.id }}">Muokkaa</a> |
+    <a href="/remove/{{ comment.id }}">Poista</a>
+  </p>
+  {% endif %}
+  <hr />
+  {% endfor %}
+
+
+  {% if session.user_id %}
+  <h2>Uusi viesti</h2>
+
+  <form action="/new_comment" method="post">
+    <p>
+      Viesti:<br />
+      <textarea name="content" rows="5" cols="40"></textarea>
+    </p>
+    <input type="hidden" name="location_id" value="{{ thread.id }}" />
+    <input type="submit" value="Lähetä" />
+  </form>
+  <hr />
+  {% endif %}
+</body>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Kirjautuminen</title>
+  <title>Locations</title>
 </head>
 
 <body>
@@ -11,7 +11,6 @@
     Kaljalle sovellus
   </p>
   <hr />
-
   <!-- sidebar/tai mikä ikinä se mistä voi mennä muihin sivustoihi-->
 
   {% if session.username %}
@@ -26,26 +25,33 @@
   <p>
     Olet kirjautunut nimellä {{ session.username }}
   </p>
-
-  {% else %}
-  <p>
-    <a href="/">Kotisivu</a> 
-    <a href="/locations">Sijainnit</a> 
-    <a href="/register">Rekisteröinti</a> 
-  </p>
-
-  <form action="/login" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password" />
-    </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
   {% endif %}
+  <hr />
+
+  <p> Baarilista </p>
+
+  {% for location in locations %}
+  <p>
+    <a href="/locations/{{ location.id }}">{{ location.bar_name }}, {{location.bar_address}}</a>
+    <br />  
+    
+    {% if location.total > 0 %}
+    {{ location.total }} kommenttia, uusin {{ location.last }}
+    
+    {% else %}
+    Ei kommenteja
+
+    {% endif %}
+  </p>
+  
+  <hr />
+
+  {% endfor %}
+
+
+
+
+
 </body>
 
 </html>

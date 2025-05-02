@@ -6,13 +6,20 @@
 </head>
 
 <body>
+
+  <p> Uusi sijainti </p>
+
   <p>
     <a href="/">Kotisivu</a> 
-    <a href="/">Sijainnit</a> 
+    <a href="/locations">Sijainnit</a> 
     <a href="/new_location">Uusi sijainti</a> 
   </p>
 
-  <p> Uusi sijainti </p>
+  <hr />
+
+  {% if session.user_id %}
+
+
   <br/>
 
   <form action="/result" method="post">
@@ -31,46 +38,46 @@
 
     <!--KALJAA -->
     <p>
-      <input type="checkbox" name="beer" value="1" /> Kalja <br/>
+      <input type="checkbox" name="beer" value="beer" /> Kalja <br/>
 
-      <input type="checkbox" name="bsize" value="0.33/0.4" /> pieni (0.33 / 0.4)
-      <input type="text" name="bprice" placeholder="4.00"/> (€)<br /> 
+      <input type="checkbox" name="small_beer" value="0.33/0.4" /> pieni (0.33 / 0.4)
+      <input type="text" name="small_beer_price" placeholder="4.00"/> (€)<br /> 
 
-      <input type="checkbox" name="bsize" value="0.5" /> iso (0.5 l)
-      <input type="text" name="bprice" placeholder="5.80"/> (€)<br />
+      <input type="checkbox" name="big_beer" value="0.5" /> iso (0.5 l)
+      <input type="text" name="big_beer_price" placeholder="5.80"/> (€)<br />
     </p>
 
     <!--LONKERO -->
     <p>
-      <input type="checkbox" name="lonkero" value="1" /> Lonkero <br/>
+      <input type="checkbox" name="lonkero" value="lonkero" /> Lonkero <br/>
 
-      <input type="checkbox" name="lsize" value="0.33" /> pieni (0.33)
-      <input type="text" name="lprice" placeholder="5.50"/> (€)<br /> 
+      <input type="checkbox" name="small_lonkero" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_lonkero_price" placeholder="5.50"/> (€)<br /> 
 
-      <input type="checkbox" name="lsize" value="0.5" /> iso (0.5)
-      <input type="text" name="lprice" placeholder="8.00"/> (€)<br />
+      <input type="checkbox" name="big_lonkero" value="0.5" /> iso (0.5)
+      <input type="text" name="big_lonkero_price" placeholder="8.00"/> (€)<br />
     </p>
 
     <!-- Ananas / muut..? -->
     <p>
-      <input type="checkbox" name="ananas" value="1" /> Ananas Lonkero (tai muu maku lonkero) <br/>
+      <input type="checkbox" name="ananas" value="ananas" /> Ananas Lonkero (tai muu maku lonkero) <br/>
 
-      <input type="checkbox" name="asize" value="0.33" /> pieni (0.33)
-      <input type="text" name="aprice" placeholder="5.50"/> (€)<br /> 
+      <input type="checkbox" name="small_ananas" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_ananas_price" placeholder="5.50"/> (€)<br /> 
 
-      <input type="checkbox" name="asize" value="0.5" /> iso (0.5)
-      <input type="text" name="aprice" placeholder="8.00"/> (€)<br />
+      <input type="checkbox" name="big_ananas" value="0.5" /> iso (0.5)
+      <input type="text" name="big_ananas_price" placeholder="8.00"/> (€)<br />
     </p>
 
     <!--Siideri -->
     <p>
-      <input type="checkbox" name="cider" value="1" /> Siideri <br/>
+      <input type="checkbox" name="cider" value="cider" /> Siideri <br/>
 
-      <input type="checkbox" name="csize" value="0.33" /> pieni (0.33)
-      <input type="text" name="cprice" placeholder="5.00"/> (€)<br /> 
+      <input type="checkbox" name="small_cider" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_cider_price" placeholder="5.00"/> (€)<br /> 
 
-      <input type="checkbox" name="csize" value="0.5" /> iso (0.5)
-      <input type="text" name="cprice" placeholder="7.00"/> (€)<br />
+      <input type="checkbox" name="big_cider" value="0.5" /> iso (0.5)
+      <input type="text" name="big_cider_price" placeholder="7.00"/> (€)<br />
     </p>
 
 
@@ -91,6 +98,17 @@ redbullii ja ed energiajuomat, kivat baarimikot ja hyvät vibez"></textarea>
     </p>
     <input type="submit" value="Lähetä" />
   </form>
+
+  {% else %}
+  
+  <p>
+    Kirjaudu sisään kotisivulta, ennen kuin lisäät sijainnin!
+  </p>
+
+  {% endif %}
+
+
+
 
 </body>
 

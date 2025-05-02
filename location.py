@@ -9,6 +9,11 @@ def add_location(bar_name, bar_address, user_id, happy_hour, student_discount, g
     #add drink...? price..?
     return location_id
 
+def add_comment(content, user_id, location_id):
+    sql = """INSERT INTO comments (content, sent_at, user_id, location_id)
+    VALUES (?, datetime("now"), ?, ?)"""
+    db.execute(sql, [content, user_id, location_id])
+
 def add_drink(drink_name):
     # Check
     existing = db.query("SELECT id FROM drink WHERE drink_name = ?", [drink_name])
@@ -32,3 +37,26 @@ def update_drink_price(location_id, drink_id, drink_size, new_price):
     AND drink_id = ? 
     AND drink_size = ?"""
     db.execute(sql, [new_price, location_id, drink_id, drink_size])
+
+def get_locations():
+    sql = """SELECT l.id, l.bar_name, l.bar_address,
+    COUNT(c.id) total, MAX(c.sent_at) last
+    FROM locations l
+    LEFT JOIN comments c ON l.id = c.location_id
+    GROUP BY l.id
+    ORDER BY l.id DESC"""
+    return db.query(sql)
+
+
+def get_location(location_id):
+    sql ="""SELECT id, bar_name, bar_address, happy_hour, student_discount,
+     gluten_free, student_patch, extra_info FROM locations WHERE id = ? """
+    return db.query(sql, [location_id])[0]
+
+def get_comments(location_id):
+    sql = """SELECT c.id, c.content, c.sent_at, c.user_id, u.username
+    FROM comments c, users u
+    WHERE c.user_id = u.id AND c.location_id = ?
+    ORDER BY c.id"""
+    return db.query(sql, [location_id])
+

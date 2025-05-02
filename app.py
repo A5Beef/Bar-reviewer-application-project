@@ -9,15 +9,38 @@ import config, location
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
-
+#homepage
 @app.route("/")
 def index():
     return render_template("index.html")
+
+#location page
+@app.route("/locations")
+def locations():
+    locations = location.get_locations()
+    return render_template("locations.html", locations=locations)
 
 # Uusi tietokohde, ja sen tulos
 @app.route("/new_location")
 def order():
     return render_template("order.html")
+
+
+@app.route("/locations/<int:location_id>")
+def show_location(location_id):
+    thread = location.get_location(location_id)
+    comments = location.get_comments(location_id)
+    return render_template("locationpage.html", thread=thread, comments=comments)
+
+
+@app.route("/new_comment", methods=["POST"])
+def new_comment():
+    content = request.form["content"]
+    user_id = session["user_id"]
+    location_id = request.form["location_id"]
+
+    location.add_comment(content, user_id, location_id)
+    return redirect("/locations/" + str(location_id))
 
 
 @app.route("/result", methods=["POST"])
@@ -31,28 +54,7 @@ def result():
         extras = request.form.getlist("extra")
         extra_info = request.form.get("extra_info", "")
 
-        drinks = {
-            'beer': {
-                'selected': request.form.get("beer") == "on",
-                'sizes': request.form.getlist("bsize"),
-                'prices': request.form.getlist("bprice")
-            },
-            'lonkero': {
-                'selected': request.form.get("lonkero") == "on",
-                'sizes': request.form.getlist("lsize"),
-                'prices': request.form.getlist("lprice")
-            },
-            'ananas': {
-                'selected': request.form.get("ananas") == "on",
-                'sizes': request.form.getlist("asize"),
-                'prices': request.form.getlist("aprice")
-            },
-            'cider': {
-                'selected': request.form.get("cider") == "on",
-                'sizes': request.form.getlist("csize"),
-                'prices': request.form.getlist("cprice")
-            }
-        }
+        
 
         new_location_id = location.add_location(bar_name=bar_name, bar_address=bar_address,
         user_id=session["user_id"],
@@ -62,23 +64,94 @@ def result():
         student_patch=1 if 'student_patch' in extras else 0,
         extra_info=extra_info )
 
-        for drink_type, data in drinks.items():
-            data["pairs"] = list(zip(data["sizes"], data["prices"]))
+
+        # huge chunk of userinput from /order
+        beer = request.form.get("beer")
+        small_beer = request.form.get("small_beer")
+        small_beer_price = request.form.get("small_beer_price")
+        big_beer = request.form.get("big_beer")
+        big_beer_price = request.form.get("big_beer_price")
+        
+        lonkero = request.form.get("lonkero")
+        small_lonkero = request.form.get("small_lonkero")
+        small_lonkero_price = request.form.get("small_lonkero_price")
+        big_lonkero = request.form.get("big_lonkero")
+        big_lonkero_price = request.form.get("big_lonkero_price")
+
+        ananas = request.form.get("ananas")
+        small_ananas = request.form.get("small_ananas")
+        small_ananas_price = request.form.get("small_ananas_price")
+        big_ananas = request.form.get("big_ananas")
+        big_ananas_price = request.form.get("big_ananas_price")
+
+        cider = request.form.get("cider")
+        small_cider = request.form.get("small_cider")
+        small_cider_price = request.form.get("small_cider_price")
+        big_cider = request.form.get("big_cider")
+        big_cider_price = request.form.get("big_cider_price")
+
+        #create drinks (not a good way, later revision maybe)
+        beer_id = location.add_drink(drink_name="beer")
+        lonkero_id = location.add_drink(drink_name="lonkero")
+        ananas_id = location.add_drink(drink_name="ananas")
+        cider_id = location.add_drink(drink_name="cider")
+
+
+        #add drinks to database (not a good way)
+        if beer:
+            location.add_price(location_id=new_location_id, drink_id=beer_id, drink_size=small_beer, price=small_beer_price)
+            location.add_price(location_id=new_location_id, drink_id=beer_id, drink_size=big_beer, price=big_beer_price)
+
+        if lonkero:
+            location.add_price(location_id=new_location_id, drink_id=lonkero_id, drink_size=small_lonkero, price=small_lonkero_price)
+            location.add_price(location_id=new_location_id, drink_id=lonkero_id, drink_size=big_lonkero, price=big_lonkero_price)
+
+        if ananas:
+            location.add_price(location_id=new_location_id, drink_id=ananas_id, drink_size=small_ananas, price=small_ananas_price)
+            location.add_price(location_id=new_location_id, drink_id=ananas_id, drink_size=big_ananas, price=big_ananas_price)
+
+        if cider:
+            location.add_price(location_id=new_location_id, drink_id=cider_id, drink_size=small_cider, price=small_cider_price)
+            location.add_price(location_id=new_location_id, drink_id=cider_id, drink_size=big_cider, price=big_cider_price)
+            
+
+
 
         return render_template(
             "result.html",
             bar_name=bar_name,
             bar_address=bar_address,
-            drinks=drinks,
             extras=extras,
-            extra_info=extra_info)
-
+            extra_info=extra_info,
+            beer=beer,
+            small_beer=small_beer,
+            small_beer_price=small_beer_price,
+            big_beer=big_beer,
+            big_beer_price=big_beer_price,
+            lonkero=lonkero,
+            small_lonkero = small_lonkero,
+            small_lonkero_price=small_lonkero_price,
+            big_lonkero=big_lonkero,
+            big_lonkero_price=big_lonkero_price,
+            ananas=ananas,
+            small_ananas=small_ananas,
+            small_ananas_price=small_ananas_price,
+            big_ananas=big_ananas,
+            big_ananas_price=big_ananas_price,
+            cider=cider,
+            small_cider=small_cider,
+            small_cider_price=small_cider_price,
+            big_cider=big_cider,
+            big_cider_price=big_cider_price,
+            new_location_id=new_location_id
+            )
+    
     except Exception as e:
         print(f"Error: {str(e)}")
         return "An error occurred", 500
     
 
-# kirjautimen rekisteröinti
+# login and registering
 
 @app.route("/register")
 def register():

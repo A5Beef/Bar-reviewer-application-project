@@ -28,3 +28,11 @@ CREATE TABLE price(
     drink_size TEXT NOT NULL, -- should be 0.33, 0.5
     price REAL NOT NULL
 );
+
+CREATE TABLE comments(
+    id INTEGER PRIMARY KEY,
+    content TEXT,
+    sent_at TEXT,
+    user_id INTEGER REFERENCES users(id), 
+    location_id INTEGER REFERENCES locations(id)
+);
