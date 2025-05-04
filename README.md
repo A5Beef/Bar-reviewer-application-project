@@ -24,7 +24,6 @@ Under construction:
 -following other users
 -sort by price,location,rating
 -original idea of having a map. google map/api?
--
 
 
 
