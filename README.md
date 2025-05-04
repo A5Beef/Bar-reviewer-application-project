@@ -24,10 +24,31 @@ Under construction:
 -following other users
 -sort by price,location,rating
 -original idea of having a map. google map/api?
+-picture functionality on locations/ front
 
 
 
 --------------------------------------------------------------------------------------------
+Instructions on installing the program:
+
+1. download files
+2. terminal: cd (your folder location)
+3. terminal: python3 -m venv venv
+4. terminal: source venv/bin/activate
+5. terminal: pip install flask
+6. terminal: sqlite3 database.db
+7.  paste schema.sql to terminal
+
+8. exit and repeat instructions until step 4
+9. terminal: flask run
+10. access the program on a browser with the provided address
+
+
+
+
+
+--------------------------------------------------------------------------------------------
+
 Original thought/plans and "diary":
 
 
