@@ -1,10 +1,9 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
-import config, location
-
+import config, location, users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -18,7 +17,10 @@ def index():
 @app.route("/locations")
 def locations():
     locations = location.get_locations()
-    return render_template("locations.html", locations=locations)
+
+    query = request.args.get("query")
+    results = location.search(query) if query else []
+    return render_template("locations.html", locations=locations, query=query, results=results)
 
 # Uusi tietokohde, ja sen tulos
 @app.route("/new_location")
@@ -30,8 +32,10 @@ def order():
 def show_location(location_id):
     thread = location.get_location(location_id)
     comments = location.get_comments(location_id)
-    return render_template("locationpage.html", thread=thread, comments=comments)
-
+    drinks = location.get_drinks(location_id)
+    creator = location.get_creator(location_id)
+    return render_template("locationpage.html", thread=thread, comments=comments, drinks=drinks, creator=creator)
+    
 
 @app.route("/new_comment", methods=["POST"])
 def new_comment():
@@ -41,6 +45,61 @@ def new_comment():
 
     location.add_comment(content, user_id, location_id)
     return redirect("/locations/" + str(location_id))
+
+@app.route("/edit/<int:comment_id>", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    comment = location.get_comment(comment_id)
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("edit.html", comment=comment)
+
+    if request.method == "POST":
+        content = request.form["content"]
+        location.update_comment(comment["id"], content)
+        return redirect("/locations/" + str(comment["location_id"]))
+    
+@app.route("/remove/<int:comment_id>", methods=["GET", "POST"])
+def remove_comment(comment_id):
+    comment = location.get_comment(comment_id)
+
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+
+    
+
+    if request.method == "GET":
+        return render_template("remove.html", comment=comment)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            location.remove_comment(comment["id"])
+        return redirect("/locations/" + str(comment["location_id"]))
+
+
+
+    
+@app.route("/editlocation/<int:location_id>", methods=["GET", "POST"])
+def edit_location(location_id):
+    locationinfo = location.get_location(location_id)
+    
+    if request.method == "GET":
+        return render_template("editlocation.html", locationinfo=locationinfo)
+
+    if request.method == "POST":
+        content = request.form["content"]
+        location.update_location(location["id"], content)
+        return redirect("/locations/" + str(locationinfo["location_id"]))
+
+
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = location.search(query) if query else []
+    return render_template("locations.html", query=query, results=results)
+
+
 
 
 @app.route("/result", methods=["POST"])
@@ -200,3 +259,12 @@ def login():
 def logout():
     session.clear()  
     return redirect("/")
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    comments = users.get_comments(user_id)
+    locations = users.get_locations(user_id)
+    return render_template("user.html", user=user, comments=comments, locations=locations)

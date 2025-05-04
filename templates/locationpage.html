@@ -10,6 +10,9 @@
     Baarisivu
   </p>
  
+
+  {% if session.username %}
+
   <p>
     <a href="/">Kotisivu</a> 
     <a href="/locations">Sijainnit</a> 
@@ -17,16 +20,89 @@
     <a href="/logout">Kirjaudu ulos</a> 
   </p>
 
+  Olet kirjautunut nimellä {{ session.username }}
+  </p>
+
+  {% else %}
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/register">Rekisteröinti</a> 
+  </p>
+
+
+  {% endif %}
+  <hr />
+
+  
   <p>
     Baari: {{thread.bar_name}} <br />
     Osoite: {{thread.bar_address}} <br />
-    Luonut käyttäjä: under maintanace <br />
+    Luonut käyttäjä: <a href="/user/{{ creator.id }}">{{ creator.username }}</a><br />
   </p>
   <br />
 
   <p>
-    Baarin hanajuomat:
+    Baarin hanajuomat: <br/>
+    <br/>
+
+    {% for drink in drinks if drink.drink_name == "beer" %}
+    Kalja:
+    {{ drink.drink_size }}l - {{ drink.price }}€<br>
+    {% endfor %}
     
+    <br/>
+
+    {% for drink in drinks if drink.drink_name == "lonkero" %}
+    Lonkero:
+    {{ drink.drink_size }}l - {{ drink.price }}€<br>
+    {% endfor %}
+    <br/>
+
+    {% for drink in drinks if drink.drink_name == "ananas" %}
+    Ananas/Muu maku lonkero:
+    {{ drink.drink_size }}l - {{ drink.price }}€<br>
+    {% endfor %}
+
+    <br/>
+    {% for drink in drinks if drink.drink_name == "cider" %}
+    Siideri:
+    {{ drink.drink_size }}l - {{ drink.price }}€<br>
+    {% endfor %}
+
+
+  </p>
+
+  <p>
+    Edut ja plussat:
+
+    <br/>
+    {% if thread.happy_hour %}
+    - Happy hour
+    {% endif %}
+
+    <br/>
+    {% if thread.student_discount %}
+    - Opiskelija-alennus
+    {% endif %}
+
+    <br/>
+    {% if thread.gluten_free%}
+    - Gluteenittomia vaihtoehtoja
+    {% endif %} 
+
+    <br/>
+    {% if thread.student_patch %}
+    - Haalarimerkkejä
+    {% endif %}
+    <br/>
+    <br/>
+
+    {% if thread.extra_info %}
+    Lisätietoa:
+    <br/>
+    {{thread.extra_info}}
+    {% endif %}
 
   </p>
 
@@ -35,7 +111,7 @@
    <!-- show comments-->
   {% for comment in comments %}
   <p>
-    {{ comment.username }} ({{ comment.sent_at }}):
+    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>({{ comment.sent_at }}):
   </p>
   <p>
     {{ comment.content }}
@@ -64,4 +140,6 @@
   </form>
   <hr />
   {% endif %}
+
+
 </body>

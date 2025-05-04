@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Kommentin poisto</title>
+</head>
+
+<body>
+
+  <p>
+    Kaljalle sovellus
+  </p>
+  <hr />
+
+  <!-- ssidebarthing-->
+
+  {% if session.username %}
+  
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/new_location">Uusi sijainti</a> 
+    <a href="/logout">Kirjaudu ulos</a> 
+  </p>
+  
+  <p>
+    Olet kirjautunut nimellä {{ session.username }}
+  </p>
+
+  <h1>Kommentin poisto</h1>
+
+  <form action="/remove/{{ comment.id }}" method="post">
+    <p>
+      Haluatko varmasti poistaa viestin?
+    </p>
+    <input type="submit" name="continue" value="Jatka" />
+    <input type="submit" name="cancel" value="Peruuta" />
+  </form>
+
+
+  {% else %}
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/register">Rekisteröinti</a> 
+  </p>
+
+  {% endif %}
+</body>
+
+</html>

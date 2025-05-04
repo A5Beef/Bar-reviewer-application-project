@@ -1,0 +1,45 @@
+<h1>Käyttäjä {{ user.username }}</h1>
+
+
+{% if locations %}
+<h2>Lisäämät baarit ({{ locations|length }})</h2>
+<ul>
+    {% for location in locations %}
+    <li>
+        <a href="/locations/{{ location.id }}">
+            {{ location.bar_name }}
+        </a>
+        <div class="address">{{ location.bar_address }}</div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<p>
+  Käyttäjä on lähettänyt {{ comments|length }} viestiä
+</p>
+
+{% if comments %}
+<p>
+  Ensimmäinen viesti lähetetty {{ comments[-1].sent_at }}
+</p>
+<p>
+  Viimeisin viesti lähetetty {{ comments[0].sent_at }}
+</p>
+
+<h2>Viestit</h2>
+<ul>
+    {% for comment in comments %}
+      <li>
+        <a href="/locations/{{ comment.location_id }}#comment-{{ comment.id }}">
+          {{ comment.location_name }}
+        </a>
+        <div>{{ comment.content|truncate(100) }}</div>
+        <small>{{ comment.sent_at }}</small>
+      </li>  
+    {% endfor %}
+</ul>
+{% else %}
+<p>Ei vielä viestejä.</p>
+{% endif %}

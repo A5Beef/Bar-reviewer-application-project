@@ -20,15 +20,68 @@
     <a href="/locations">Sijainnit</a> 
     <a href="/new_location">Uusi sijainti</a> 
     <a href="/logout">Kirjaudu ulos</a> 
+    
+    <form action="/search" method="get">
+      <p>
+        Hakusana:
+        {% if query %}
+        <input type="text" name="query" value="{{ query }}" />
+        {% else %}
+        <input type="text" name="query" />
+        {% endif %}
+      </p>
+      <input type="submit" value="Hae" />
+    </form>
+  
   </p>
   
   <p>
     Olet kirjautunut nimellä {{ session.username }}
   </p>
+
+  {% else %}
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/register">Rekisteröinti</a> 
+
+    <form action="/search" method="get">
+      <p>
+        Hakusana:
+        {% if query %}
+        <input type="text" name="query" value="{{ query }}" />
+        {% else %}
+        <input type="text" name="query" />
+        {% endif %}
+      </p>
+      <input type="submit" value="Hae" />
+    </form>
+  
+  </p>
+
   {% endif %}
   <hr />
 
+
   <p> Baarilista </p>
+
+  {% if query %}
+  <hr />
+  <h2>Tulokset</h2>
+  
+  <ul>
+  {% for result in results %}
+    <li>
+      <a href="/locations/{{ result.location_id }}">
+        {{ result.location_name }}
+      </a>
+      <br />
+      {{ result.username }} ({{ result.sent_at }})
+    </li>  
+  {% endfor %}
+  </ul>
+  
+  {% else %}
 
   {% for location in locations %}
   <p>
@@ -47,6 +100,8 @@
   <hr />
 
   {% endfor %}
+
+  {% endif%}
 
 
 

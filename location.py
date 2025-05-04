@@ -53,6 +53,14 @@ def get_location(location_id):
      gluten_free, student_patch, extra_info FROM locations WHERE id = ? """
     return db.query(sql, [location_id])[0]
 
+def get_drinks(location_id):
+    sql = """SELECT d.id, d.drink_name, p.drink_size, p.price
+    FROM drink d
+    JOIN price p ON p.drink_id = d.id
+    WHERE p.location_id = ?
+    ORDER BY d.drink_name ASC"""
+    return db.query(sql, [location_id])
+
 def get_comments(location_id):
     sql = """SELECT c.id, c.content, c.sent_at, c.user_id, u.username
     FROM comments c, users u
@@ -60,3 +68,54 @@ def get_comments(location_id):
     ORDER BY c.id"""
     return db.query(sql, [location_id])
 
+def get_comment(comment_id):
+    sql = "SELECT id, content, user_id, location_id FROM comments WHERE id = ?"
+    return db.query(sql, [comment_id])[0]
+
+def update_comment(comment_id, content):
+    sql = "UPDATE comments SET content = ? WHERE id = ?"
+    db.execute(sql, [content, comment_id])
+
+def remove_comment(comment_id):
+    sql = "DELETE FROM comments WHERE id = ?"
+    db.execute(sql, [comment_id])
+
+def search(query):
+    sql = """SELECT 
+                l.id as location_id,
+                l.bar_name as location_name,
+                NULL as username,
+                NULL as sent_at,
+                'location' as match_type
+             FROM locations l
+             WHERE l.bar_name LIKE '%' || ? || '%'
+             
+             UNION
+             
+             SELECT 
+                c.location_id,
+                l.bar_name,
+                u.username,
+                c.sent_at,
+                'comment' as match_type
+             FROM comments c
+             JOIN locations l ON c.location_id = l.id
+             JOIN users u ON c.user_id = u.id
+             WHERE c.content LIKE '%' || ? || '%'
+             
+             ORDER BY location_name"""
+    return db.query(sql, [query, query])
+
+
+def update_location(location_id, content):
+    sql = "UPDATE comments SET content = ? WHERE id = ?"
+    db.execute(sql, [content, comment_id])
+
+
+def get_creator(location_id):
+    sql = """SELECT u.id, u.username 
+         FROM users u
+         JOIN locations l ON u.id = l.user_id
+         WHERE l.id = ?"""
+    result = db.query(sql, [location_id])
+    return result[0] if result else None
