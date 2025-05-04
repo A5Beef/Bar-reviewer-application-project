@@ -2,29 +2,29 @@
 
 A program to chart bars/restaurants.
 
--Users can explore added locations and the draft drinks that are served there.
--Users can register, log in, log out.
--Users can add comments to locations.
--Users can edit and delete their comments.
--Users can search for locations or comments with keywords.
--Users can add new locations, their addresses, names, served draft drinks, extra info and benefits.
--Users can see added locations and the comments under that location. 
--Users can explore other user profiles.
+- Users can explore added locations and the draft drinks that are served there.
+- Users can register, log in, log out.
+- Users can add comments to locations.
+- Users can edit and delete their comments.
+- Users can search for locations or comments with keywords.
+- Users can add new locations, their addresses, names, served draft drinks, extra info and benefits.
+- Users can see added locations and the comments under that location. 
+- Users can explore other user profiles.
 
 
 
 
 Under construction:
--Adding a rating system (1-5 stars) to locations.
--editing and deleting locations
--user ratings
--some other data like avg.rating on bars and even users.
--visuals, clarity
--favourite bars
--following other users
--sort by price,location,rating
--original idea of having a map. google map/api?
--picture functionality on locations/ front
+- Adding a rating system (1-5 stars) to locations.
+- editing and deleting locations
+- user ratings
+- some other data like avg.rating on bars and even users.
+- visuals, clarity
+- favourite bars
+- following other users
+- sort by price,location,rating
+- original idea of having a map. google map/api?
+- picture functionality on locations/ front
 
 
 
