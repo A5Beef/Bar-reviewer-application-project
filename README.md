@@ -11,7 +11,7 @@ A program to chart bars/restaurants.
 -Users can see added locations and the comments under that location. 
 -Users can explore other user profiles.
 
-
+--------------------------------------------------------------------------------------------
 
 
 Under construction:
@@ -24,19 +24,6 @@ Under construction:
 -following other users
 -sort by price,location,rating
 -original idea of having a map. google map/api?
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-
-
 
 
 
