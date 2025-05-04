@@ -11,7 +11,7 @@ A program to chart bars/restaurants.
 -Users can see added locations and the comments under that location. 
 -Users can explore other user profiles.
 
---------------------------------------------------------------------------------------------
+
 
 
 Under construction:
@@ -27,7 +27,7 @@ Under construction:
 
 
 
-
+--------------------------------------------------------------------------------------------
 Original thought/plans and "diary":
 
 
