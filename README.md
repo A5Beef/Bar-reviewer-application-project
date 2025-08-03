@@ -47,9 +47,3 @@ Instructions on installing the program:
 
 
 
-
-
-
-edit:
-
-Highest priority: ability to edit location and its data, visual clearness and aesthetics, user interface..?
