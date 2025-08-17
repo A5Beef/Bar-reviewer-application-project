@@ -10,13 +10,14 @@ A program to chart bars/restaurants.
 - Users can add new locations, their addresses, names, served draft drinks, extra info and benefits.
 - Users can see added locations and the comments under that location. 
 - Users can explore other user profiles.
+- Users can edit and delete locaitons
 
 
 
 
 Under construction:
 - Adding a rating system (1-5 stars) to locations.
-- editing and deleting locations
+- Bugs with editing and deleting locations. (Duplicates the drinks if edits, cant delete if there are comments)
 - user ratings
 - some other data like avg.rating on bars and even users.
 - visuals, clarity
