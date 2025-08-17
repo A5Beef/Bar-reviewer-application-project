@@ -115,7 +115,19 @@ def update_location(location_id, bar_name, bar_address, happy_hour,
             WHERE id=?"""
     db.execute(sql, [bar_name, bar_address, happy_hour, student_discount,
                      gluten_free, student_patch, extra_info, location_id])
-    db.commit()
+
+def remove_location(location_id):
+    sql_prices= """DELETE FROM price
+    WHERE location_id = ?"""
+    db.execute(sql_prices, [location_id])
+
+    sql_drinks= """DELETE FROM drink
+    WHERE id NOT IN (SELECT DISTINCT drink_id
+    FROM price)"""
+    db.execute(sql_drinks)
+
+    sql = """DELETE FROM locations WHERE id = ?"""
+    db.execute(sql, [location_id])
 
 
 

@@ -110,7 +110,7 @@
   {% if creator.id == session.user_id %}
   <p>
     <a href="/editlocation/{{thread.id}}">Muokkaa sijaintia</a> |
-    <a href="/">Poista sijainti</a>
+    <a href="/removelocation/{{thread.id}}">Poista sijainti</a>
   </p>
   {% endif %}
 

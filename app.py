@@ -78,8 +78,6 @@ def remove_comment(comment_id):
         return redirect("/locations/" + str(comment["location_id"]))
 
 
-
-    
 @app.route("/editlocation/<int:location_id>", methods=["GET", "POST"])
 def edit_location(location_id):
     locationinfo = location.get_location(location_id)
@@ -92,6 +90,23 @@ def edit_location(location_id):
         drinks[drink_name][size] = price
 
     return render_template("editlocation.html", locationinfo=locationinfo, drinks=drinks)
+
+
+@app.route("/removelocation/<int:location_id>", methods=["GET", "POST"])
+def remove_location(location_id):
+    locationinfo = location.get_location(location_id)
+
+    if "user_id" not in session:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("removelocation.html", locationinfo=locationinfo)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            location.remove_location(location_id)
+        return redirect("/locations")
+
 
 
 @app.route("/search")
@@ -128,10 +143,10 @@ def result():
                 extra_info=extra_info
             )
             current_location_id = location_id
-            
+
         else:
             # 🟢 CREATE new
-            new_location_id = location.add_location(
+            current_location_id = location.add_location(
                 bar_name=bar_name,
                 bar_address=bar_address,
                 user_id=session["user_id"],
@@ -141,7 +156,6 @@ def result():
                 student_patch=1 if 'student_patch' in extras else 0,
                 extra_info=extra_info
             )
-            current_location_id = new_location_id
 
 
         # huge chunk of userinput from /order
@@ -178,20 +192,20 @@ def result():
 
         #add drinks to database (not a good way)
         if beer:
-            location.add_price(location_id=new_location_id, drink_id=beer_id, drink_size=small_beer, price=small_beer_price)
-            location.add_price(location_id=new_location_id, drink_id=beer_id, drink_size=big_beer, price=big_beer_price)
+            location.add_price(location_id=current_location_id, drink_id=beer_id, drink_size=small_beer, price=small_beer_price)
+            location.add_price(location_id=current_location_id, drink_id=beer_id, drink_size=big_beer, price=big_beer_price)
 
         if lonkero:
-            location.add_price(location_id=new_location_id, drink_id=lonkero_id, drink_size=small_lonkero, price=small_lonkero_price)
-            location.add_price(location_id=new_location_id, drink_id=lonkero_id, drink_size=big_lonkero, price=big_lonkero_price)
+            location.add_price(location_id=current_location_id, drink_id=lonkero_id, drink_size=small_lonkero, price=small_lonkero_price)
+            location.add_price(location_id=current_location_id, drink_id=lonkero_id, drink_size=big_lonkero, price=big_lonkero_price)
 
         if ananas:
-            location.add_price(location_id=new_location_id, drink_id=ananas_id, drink_size=small_ananas, price=small_ananas_price)
-            location.add_price(location_id=new_location_id, drink_id=ananas_id, drink_size=big_ananas, price=big_ananas_price)
+            location.add_price(location_id=current_location_id, drink_id=ananas_id, drink_size=small_ananas, price=small_ananas_price)
+            location.add_price(location_id=current_location_id, drink_id=ananas_id, drink_size=big_ananas, price=big_ananas_price)
 
         if cider:
-            location.add_price(location_id=new_location_id, drink_id=cider_id, drink_size=small_cider, price=small_cider_price)
-            location.add_price(location_id=new_location_id, drink_id=cider_id, drink_size=big_cider, price=big_cider_price)
+            location.add_price(location_id=current_location_id, drink_id=cider_id, drink_size=small_cider, price=small_cider_price)
+            location.add_price(location_id=current_location_id, drink_id=cider_id, drink_size=big_cider, price=big_cider_price)
             
 
 
@@ -222,7 +236,7 @@ def result():
             small_cider_price=small_cider_price,
             big_cider=big_cider,
             big_cider_price=big_cider_price,
-            new_location_id=new_location_id
+            current_location_id=current_location_id
             )
     
     except Exception as e:
