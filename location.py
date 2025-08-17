@@ -107,9 +107,16 @@ def search(query):
     return db.query(sql, [query, query])
 
 
-def update_location(location_id, content):
-    sql = "UPDATE comments SET content = ? WHERE id = ?"
-    db.execute(sql, [content, comment_id])
+def update_location(location_id, bar_name, bar_address, happy_hour,
+                    student_discount, gluten_free, student_patch, extra_info):
+    
+    sql = """UPDATE locations
+            SET bar_name=?, bar_address=?, happy_hour=?, student_discount=?, gluten_free=?, student_patch=?, extra_info=?
+            WHERE id=?"""
+    db.execute(sql, [bar_name, bar_address, happy_hour, student_discount,
+                     gluten_free, student_patch, extra_info, location_id])
+    db.commit()
+
 
 
 def get_creator(location_id):

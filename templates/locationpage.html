@@ -106,6 +106,14 @@
 
   </p>
 
+  <!-- show actions if user made post-->
+  {% if creator.id == session.user_id %}
+  <p>
+    <a href="/editlocation/{{thread.id}}">Muokkaa sijaintia</a> |
+    <a href="/">Poista sijainti</a>
+  </p>
+  {% endif %}
+
   <hr />
 
    <!-- show comments-->
@@ -119,8 +127,8 @@
    <!-- show actions if user made comment-->
   {% if comment.user_id == session.user_id %}
   <p>
-    <a href="/edit/{{ comment.id }}">Muokkaa</a> |
-    <a href="/remove/{{ comment.id }}">Poista</a>
+    <a href="/edit/{{ comment.id }}">Muokkaa kommenttia</a> |
+    <a href="/remove/{{ comment.id }}">Poista kommentti</a>
   </p>
   {% endif %}
   <hr />

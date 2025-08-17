@@ -83,14 +83,15 @@ def remove_comment(comment_id):
 @app.route("/editlocation/<int:location_id>", methods=["GET", "POST"])
 def edit_location(location_id):
     locationinfo = location.get_location(location_id)
-    
-    if request.method == "GET":
-        return render_template("editlocation.html", locationinfo=locationinfo)
+    rows = location.get_drinks(location_id)
 
-    if request.method == "POST":
-        content = request.form["content"]
-        location.update_location(location["id"], content)
-        return redirect("/locations/" + str(locationinfo["location_id"]))
+    drinks = {}
+    for drink_id, drink_name, size, price in rows:
+        if drink_name not in drinks:
+            drinks[drink_name] = {}
+        drinks[drink_name][size] = price
+
+    return render_template("editlocation.html", locationinfo=locationinfo, drinks=drinks)
 
 
 @app.route("/search")
@@ -107,21 +108,40 @@ def result():
     try:
         if "user_id" not in session:
             return redirect("/login")
+        
+        location_id = request.form.get("location_id")
 
         bar_name = request.form.get("bar_name")
         bar_address= request.form.get("bar_address")
         extras = request.form.getlist("extra")
         extra_info = request.form.get("extra_info", "")
 
-        
-
-        new_location_id = location.add_location(bar_name=bar_name, bar_address=bar_address,
-        user_id=session["user_id"],
-        happy_hour=1 if 'happy_hour' in extras else 0,
-        student_discount=1 if 'student_discount' in extras else 0,
-        gluten_free=1 if 'gluten_free' in extras else 0,
-        student_patch=1 if 'student_patch' in extras else 0,
-        extra_info=extra_info )
+        if location_id:  
+            location.update_location(
+                location_id=location_id,
+                bar_name=bar_name,
+                bar_address=bar_address,
+                happy_hour=1 if 'happy_hour' in extras else 0,
+                student_discount=1 if 'student_discount' in extras else 0,
+                gluten_free=1 if 'gluten_free' in extras else 0,
+                student_patch=1 if 'student_patch' in extras else 0,
+                extra_info=extra_info
+            )
+            current_location_id = location_id
+            
+        else:
+            # 🟢 CREATE new
+            new_location_id = location.add_location(
+                bar_name=bar_name,
+                bar_address=bar_address,
+                user_id=session["user_id"],
+                happy_hour=1 if 'happy_hour' in extras else 0,
+                student_discount=1 if 'student_discount' in extras else 0,
+                gluten_free=1 if 'gluten_free' in extras else 0,
+                student_patch=1 if 'student_patch' in extras else 0,
+                extra_info=extra_info
+            )
+            current_location_id = new_location_id
 
 
         # huge chunk of userinput from /order
