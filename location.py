@@ -26,9 +26,19 @@ def add_drink(drink_name):
     return db.last_insert_id()
 
 def add_price(location_id, drink_id, drink_size, price):
-    sql =  """INSERT INTO price
-    (location_id, drink_id, drink_size, price) VALUES (?, ?, ?, ?)"""
-    db.execute(sql, [location_id, drink_id, drink_size, price])
+
+    existing = db.query("SELECT id FROM price WHERE location_id=? AND drink_id=? AND drink_size=?",
+                         [location_id, drink_id, drink_size])
+    if existing:
+        sql = """UPDATE price
+                 SET price=? 
+                 WHERE location_id=? AND drink_id=? AND drink_size=?"""
+        db.execute(sql, [price, location_id, drink_id, drink_size])
+
+    else:
+        sql =  """INSERT INTO price
+        (location_id, drink_id, drink_size, price) VALUES (?, ?, ?, ?)"""
+        db.execute(sql, [location_id, drink_id, drink_size, price])
 
 def update_drink_price(location_id, drink_id, drink_size, new_price):
     sql = """UPDATE price
@@ -117,6 +127,9 @@ def update_location(location_id, bar_name, bar_address, happy_hour,
                      gluten_free, student_patch, extra_info, location_id])
 
 def remove_location(location_id):
+    sql_comments="""DELETE FROM comments WHERE location_id = ?"""
+    db.execute(sql_comments, [location_id])
+
     sql_prices= """DELETE FROM price
     WHERE location_id = ?"""
     db.execute(sql_prices, [location_id])

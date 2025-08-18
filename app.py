@@ -145,8 +145,7 @@ def result():
             current_location_id = location_id
 
         else:
-            # 🟢 CREATE new
-            current_location_id = location.add_location(
+            new_location_id = location.add_location(
                 bar_name=bar_name,
                 bar_address=bar_address,
                 user_id=session["user_id"],
@@ -156,7 +155,11 @@ def result():
                 student_patch=1 if 'student_patch' in extras else 0,
                 extra_info=extra_info
             )
+            current_location_id = new_location_id
 
+        def check_price_add(location_id, drink_id, drink_size, price):
+            if drink_size and price:
+                location.add_price(location_id, drink_id, drink_size, price)
 
         # huge chunk of userinput from /order
         beer = request.form.get("beer")
@@ -192,21 +195,20 @@ def result():
 
         #add drinks to database (not a good way)
         if beer:
-            location.add_price(location_id=current_location_id, drink_id=beer_id, drink_size=small_beer, price=small_beer_price)
-            location.add_price(location_id=current_location_id, drink_id=beer_id, drink_size=big_beer, price=big_beer_price)
+            check_price_add(current_location_id, beer_id, small_beer, small_beer_price)
+            check_price_add(current_location_id, beer_id, big_beer, big_beer_price)
 
         if lonkero:
-            location.add_price(location_id=current_location_id, drink_id=lonkero_id, drink_size=small_lonkero, price=small_lonkero_price)
-            location.add_price(location_id=current_location_id, drink_id=lonkero_id, drink_size=big_lonkero, price=big_lonkero_price)
+            check_price_add(current_location_id, lonkero_id, small_lonkero, small_lonkero_price)
+            check_price_add(current_location_id, lonkero_id, big_lonkero, big_lonkero_price)
 
         if ananas:
-            location.add_price(location_id=current_location_id, drink_id=ananas_id, drink_size=small_ananas, price=small_ananas_price)
-            location.add_price(location_id=current_location_id, drink_id=ananas_id, drink_size=big_ananas, price=big_ananas_price)
+            check_price_add(current_location_id, ananas_id, small_ananas, small_ananas_price)
+            check_price_add(current_location_id, ananas_id, big_ananas, big_ananas_price)
 
         if cider:
-            location.add_price(location_id=current_location_id, drink_id=cider_id, drink_size=small_cider, price=small_cider_price)
-            location.add_price(location_id=current_location_id, drink_id=cider_id, drink_size=big_cider, price=big_cider_price)
-            
+            check_price_add(current_location_id, cider_id, small_cider, small_cider_price)
+            check_price_add(current_location_id, cider_id, big_cider, big_cider_price)
 
 
 
