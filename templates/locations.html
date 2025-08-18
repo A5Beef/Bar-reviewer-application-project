@@ -36,7 +36,7 @@
   </p>
   
   <p>
-    Olet kirjautunut nimellä {{ session.username }}
+    Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a> 
   </p>
 
   {% else %}
@@ -89,7 +89,7 @@
     <br />  
     
     {% if location.total > 0 %}
-    {{ location.total }} kommenttia, uusin {{ location.last }}
+    {{ location.total }} kommenttia, uusin {{ location.last }}, Luonut käyttäjä <a href="/user/{{ location.creator_id }}">{{ location.creator_name }}</a> 
     
     {% else %}
     Ei kommenteja

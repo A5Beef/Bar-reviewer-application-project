@@ -49,9 +49,11 @@ def update_drink_price(location_id, drink_id, drink_size, new_price):
     db.execute(sql, [new_price, location_id, drink_id, drink_size])
 
 def get_locations():
-    sql = """SELECT l.id, l.bar_name, l.bar_address,
+    sql = """SELECT l.id, l.bar_name, l.bar_address, u.id
+    AS creator_id, u.username AS creator_name,
     COUNT(c.id) total, MAX(c.sent_at) last
     FROM locations l
+    JOIN users u ON l.user_id = u.id
     LEFT JOIN comments c ON l.id = c.location_id
     GROUP BY l.id
     ORDER BY l.id DESC"""

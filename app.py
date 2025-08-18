@@ -131,6 +131,7 @@ def result():
         extras = request.form.getlist("extra")
         extra_info = request.form.get("extra_info", "")
 
+
         if location_id:  
             location.update_location(
                 location_id=location_id,
