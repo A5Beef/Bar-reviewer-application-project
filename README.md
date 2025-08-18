@@ -17,7 +17,6 @@ A program to chart bars/restaurants.
 
 Under construction:
 - Adding a rating system (1-5 stars) to locations.
-- Bugs with editing and deleting locations. (Duplicates the drinks if edits, cant delete if there are comments)
 - user ratings
 - some other data like avg.rating on bars and even users.
 - visuals, clarity
