@@ -1,4 +1,4 @@
-# Tietokannat-ja-web-ohjelmointi-projekti
+# Tietokannat-ja-web-ohjelmointi-projekti / Bar reviewer
 
 A program to chart bars/restaurants.
 
