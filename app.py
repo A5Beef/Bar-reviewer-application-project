@@ -3,6 +3,7 @@ from flask import Flask
 from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
+import secrets
 import config, location, users
 
 app = Flask(__name__)
@@ -39,6 +40,7 @@ def show_location(location_id):
 
 @app.route("/new_comment", methods=["POST"])
 def new_comment():
+    check_csrf()
     content = request.form["content"]
     user_id = session["user_id"]
     location_id = request.form["location_id"]
@@ -56,6 +58,7 @@ def edit_comment(comment_id):
         return render_template("edit.html", comment=comment)
 
     if request.method == "POST":
+        check_csrf()
         content = request.form["content"]
         location.update_comment(comment["id"], content)
         return redirect("/locations/" + str(comment["location_id"]))
@@ -67,12 +70,11 @@ def remove_comment(comment_id):
     if comment["user_id"] != session["user_id"]:
         abort(403)
 
-    
-
     if request.method == "GET":
         return render_template("remove.html", comment=comment)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             location.remove_comment(comment["id"])
         return redirect("/locations/" + str(comment["location_id"]))
@@ -94,6 +96,9 @@ def edit_location(location_id):
 
 @app.route("/removelocation/<int:location_id>", methods=["GET", "POST"])
 def remove_location(location_id):
+    if "user_id" not in session:
+        abort(403)
+
     locationinfo = location.get_location(location_id)
 
     if "user_id" not in session:
@@ -103,6 +108,7 @@ def remove_location(location_id):
         return render_template("removelocation.html", locationinfo=locationinfo)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             location.remove_location(location_id)
         return redirect("/locations")
@@ -120,10 +126,11 @@ def search():
 
 @app.route("/result", methods=["POST"])
 def result(): 
+    check_csrf()
     try:
         if "user_id" not in session:
             return redirect("/login")
-        
+
         location_id = request.form.get("location_id")
 
         bar_name = request.form.get("bar_name")
@@ -194,7 +201,7 @@ def result():
         cider_id = location.add_drink(drink_name="cider")
 
 
-        #add drinks to database (not a good way)
+        #add drinks to database (later revision..?)
         if beer:
             check_price_add(current_location_id, beer_id, small_beer, small_beer_price)
             check_price_add(current_location_id, beer_id, big_beer, big_beer_price)
@@ -276,9 +283,13 @@ def create():
 def login():
     username = request.form["username"]
     password = request.form["password"]
+
+    session["csrf_token"] = secrets.token_hex(16)
     
     sql = "SELECT id, password_hash FROM users WHERE username = ?"  
     result = db.query(sql, [username])
+
+    
     
     if not result:
         return "VIRHE: väärä tunnus tai salasana"
@@ -305,3 +316,7 @@ def show_user(user_id):
     comments = users.get_comments(user_id)
     locations = users.get_locations(user_id)
     return render_template("user.html", user=user, comments=comments, locations=locations)
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)

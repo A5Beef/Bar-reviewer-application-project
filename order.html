@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Uusi sijainti</title>
+</head>
+
+<body>
+
+  <p> Uusi sijainti </p>
+
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/new_location">Uusi sijainti</a> 
+  </p>
+
+  <hr />
+
+  {% if session.user_id %}
+
+
+  <br/>
+
+  <form action="/result" method="post">
+    
+    <p> Sijainti: </p>
+
+    <!-- nimi ja osoite..-->
+
+    <p>
+      Nimi: <input type="text" name="bar_name" placeholder="cool bar" /> <br/>
+      Osoite: <input type="text" name="bar_address" placeholder="baaritie 21" /> <br/>
+    </p>
+
+    
+    <p>Hanajuomat:</p>
+
+    <!--KALJAA -->
+    <p>
+      <input type="checkbox" name="beer" value="beer" /> Kalja <br/>
+
+      <input type="checkbox" name="small_beer" value="0.33/0.4" /> pieni (0.33 / 0.4)
+      <input type="text" name="small_beer_price" placeholder="4.00"/> (€)<br /> 
+
+      <input type="checkbox" name="big_beer" value="0.5" /> iso (0.5 l)
+      <input type="text" name="big_beer_price" placeholder="5.80"/> (€)<br />
+    </p>
+
+    <!--LONKERO -->
+    <p>
+      <input type="checkbox" name="lonkero" value="lonkero" /> Lonkero <br/>
+
+      <input type="checkbox" name="small_lonkero" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_lonkero_price" placeholder="5.50"/> (€)<br /> 
+
+      <input type="checkbox" name="big_lonkero" value="0.5" /> iso (0.5)
+      <input type="text" name="big_lonkero_price" placeholder="8.00"/> (€)<br />
+    </p>
+
+    <!-- Ananas / muut..? -->
+    <p>
+      <input type="checkbox" name="ananas" value="ananas" /> Ananas Lonkero (tai muu maku lonkero) <br/>
+
+      <input type="checkbox" name="small_ananas" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_ananas_price" placeholder="5.50"/> (€)<br /> 
+
+      <input type="checkbox" name="big_ananas" value="0.5" /> iso (0.5)
+      <input type="text" name="big_ananas_price" placeholder="8.00"/> (€)<br />
+    </p>
+
+    <!--Siideri -->
+    <p>
+      <input type="checkbox" name="cider" value="cider" /> Siideri <br/>
+
+      <input type="checkbox" name="small_cider" value="0.33" /> pieni (0.33)
+      <input type="text" name="small_cider_price" placeholder="5.00"/> (€)<br /> 
+
+      <input type="checkbox" name="big_cider" value="0.5" /> iso (0.5)
+      <input type="text" name="big_cider_price" placeholder="7.00"/> (€)<br />
+    </p>
+
+
+    <br />
+    <p>Edut/plussat:</p>
+    <p>
+      <input type="checkbox" name="extra" value="happy_hour" /> Happy hour
+      <input type="checkbox" name="extra" value="student_discount" /> Opiskelija-alennus
+      <input type="checkbox" name="extra" value="gluten_free" /> Gluteeniton kalja
+      <input type="checkbox" name="extra" value="student_patch" /> Haalarimerkki
+    </p>
+
+    <br />  
+    <p>Lisätietoa (mikä panimo hanoissa, % ale, happyhour ajat, speciaalit, jne): <br />
+      <textarea name="extra_info" rows="5" cols="70" placeholder= "Hartwallin auraa lonkku happyjoe, 50 senttiä opiskelija-ale / 10%,
+löytyy litran bisse, appelsiinilonkeroa saa hanasta,
+redbullii ja ed energiajuomat, kivat baarimikot ja hyvät vibez"></textarea>
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Luo sijainti" />
+  </form>
+
+  {% else %}
+  
+  <p>
+    Kirjaudu sisään kotisivulta, ennen kuin lisäät sijainnin!
+  </p>
+
+  {% endif %}
+
+
+
+
+</body>
+
+</html>
