@@ -122,6 +122,7 @@
     <p>Lisätietoa (mikä panimo hanoissa, % ale, happyhour ajat, speciaalit, jne): <br />
       <textarea name="extra_info" rows="5" cols="70"> {{ locationinfo.extra_info}}</textarea>
     </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
 

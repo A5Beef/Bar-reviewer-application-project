@@ -96,7 +96,8 @@
 löytyy litran bisse, appelsiinilonkeroa saa hanasta,
 redbullii ja ed energiajuomat, kivat baarimikot ja hyvät vibez"></textarea>
     </p>
-    <input type="submit" value="Lähetä" />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" value="Luo sijainti" />
   </form>
 
   {% else %}
