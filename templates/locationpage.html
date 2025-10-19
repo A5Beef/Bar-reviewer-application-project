@@ -6,9 +6,9 @@
 </head>
 
 <body>
-  <p>
-    Baarisivu
-  </p>
+  <h1>
+    {{thread.bar_name}} 
+  </h1>
  
 
   {% if session.username %}
@@ -36,47 +36,40 @@
 
   
   <p>
-    Baari: {{thread.bar_name}} <br />
-    Osoite: {{thread.bar_address}} <br />
+    Sijainnin nimi: <b>{{thread.bar_name}} </b><br />
+    Osoite: <b>{{thread.bar_address}}</b> <br />
     Luonut käyttäjä: <a href="/user/{{ creator.id }}">{{ creator.username }}</a><br />
   </p>
   <br />
 
-  <p>
-    Baarin hanajuomat: <br/>
-    <br/>
+<p>
+  <u>Baarin hanajuomat:</u>
+</p>
 
-    {% for drink in drinks if drink.drink_name == "beer" %}
-    Kalja:
-    {{ drink.drink_size }}l - {{ drink.price }}€<br>
-    {% endfor %}
-    
-    <br/>
+{% for drink_name, label in [("beer", "Kalja"), ("lonkero", "Lonkero"), 
+                             ("ananas", "Ananas/Muu maku lonkero"), ("cider", "Siideri")] %}
+  {% set filtered_drinks = drinks | selectattr("drink_name", "equalto", drink_name) | list %}
+  {% if filtered_drinks %}
+    <p><strong>{{ label }}:</strong></p>
+    <table style="border-collapse: collapse;">
+      <tbody>
+        {% for drink in filtered_drinks %}
+        <tr>
+          <td style="padding: 2px 10px;">{{ drink.drink_size }}l</td>
+          <td style="padding: 2px 10px;">{{ drink.price }}€</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endfor %}
 
-    {% for drink in drinks if drink.drink_name == "lonkero" %}
-    Lonkero:
-    {{ drink.drink_size }}l - {{ drink.price }}€<br>
-    {% endfor %}
-    <br/>
-
-    {% for drink in drinks if drink.drink_name == "ananas" %}
-    Ananas/Muu maku lonkero:
-    {{ drink.drink_size }}l - {{ drink.price }}€<br>
-    {% endfor %}
-
-    <br/>
-    {% for drink in drinks if drink.drink_name == "cider" %}
-    Siideri:
-    {{ drink.drink_size }}l - {{ drink.price }}€<br>
-    {% endfor %}
-
-
-  </p>
 
   <p>
-    Edut ja plussat:
+    <u>Edut ja plussat:</u>
 
     <br/>
+    <b>
     {% if thread.happy_hour %}
     - Happy hour
     {% endif %}
@@ -103,6 +96,7 @@
     <br/>
     {{thread.extra_info}}
     {% endif %}
+    </b>
 
   </p>
 
