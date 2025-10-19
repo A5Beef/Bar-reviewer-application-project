@@ -2,7 +2,7 @@
 INSERT INTO users (username, password_hash) VALUES ('Barhater', 'alkomaholitappaa');
 INSERT INTO users (username, password_hash) VALUES ('Beerlover', 'kaljamielessa24');
 INSERT INTO users (username, password_hash) VALUES ('Alcohol_free221', '0percentchanceofdrinking');
-INSERT INTO users (username, password_hash) VALUES ('Maija Miettinen', 'Maija1234');
+INSERT INTO users (username, password_hash) VALUES ('Maija_Miettinen', 'Maija1234');
 INSERT INTO users (username, password_hash) VALUES ('troll67', 'sixseven');
 
 -- DRINKS

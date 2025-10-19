@@ -41,9 +41,18 @@ def show_location(location_id):
 @app.route("/new_comment", methods=["POST"])
 def new_comment():
     check_csrf()
-    content = request.form["content"]
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+
+    content = request.form["content"].strip()
     user_id = session["user_id"]
     location_id = request.form["location_id"]
+
+    if not content:
+        return "VIRHE: kommentti ei voi olla tyhjä", 400
+
 
     location.add_comment(content, user_id, location_id)
     return redirect("/locations/" + str(location_id))
@@ -281,18 +290,37 @@ def register():
 
 @app.route("/create", methods=["POST"])
 def create():
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
+    username = request.form.get("username", "").strip()
+    password1 = request.form.get("password1", "")
+    password2 = request.form.get("password2", "")
+
+    # Check for empty fields
+    if not username or not password1 or not password2:
+        return "VIRHE: täytä kaikki kentät", 400
+
+    # Check if passwords match
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        return "VIRHE: salasanat eivät ole samat", 400
+
+    # Username validation
+    if len(username) < 1:
+        return "VIRHE: käyttäjätunnuksen on oltava vähintään 1 merkkiä pitkä", 400
+    if " " in username:
+        return "VIRHE: käyttäjätunnuksessa ei saa olla välilyöntejä", 400
+
+    # Password validation
+    if len(password1) < 1:
+        return "VIRHE: salasanan on oltava vähintään 1 merkkiä pitkä", 400
+    if " " in password1:
+        return "VIRHE: salasanassa ei saa olla välilyöntejä", 400
+
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        return "VIRHE: käyttäjätunnus on jo varattu", 400
 
     return render_template("account_created.html")
 
