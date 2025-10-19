@@ -10,8 +10,7 @@ A program to chart bars/restaurants.
 - Users can add new locations, their addresses, names, served draft drinks, extra info and benefits.
 - Users can see added locations and the comments under that location. 
 - Users can explore other user profiles.
-- Users can edit and delete locaitons
-
+- Users can edit and delete locations.
 
 
 
@@ -31,19 +30,24 @@ Under construction:
 --------------------------------------------------------------------------------------------
 Instructions on installing the program:
 
-1. download files
-2. terminal: cd (your folder location)
-3. terminal: python3 -m venv venv
-4. terminal: source venv/bin/activate
-5. terminal: pip install flask
-6. terminal: sqlite3 database.db
-7.  paste schema.sql to terminal
+1. Download or clone the project files
+2. Navigate to the program folder:
+   - terminal: cd "path/to/yourfolder"
+4. Create and activate virtual environment:
+   - terminal: python3 -m venv venv
+   - terminal: source venv/bin/activate
+5. Install flask if not installed yet:
+   - terminal: pip install flask
+6. Create database:
+   - terminal: sqlite3 database.db < schema.sql
+7. Optionally add example data seed (recommended):
+   - terminal: sqlite3 database.db < seed.sql
+8. Run the application:
+   - flask run
+9. Access in browser with the provided address (usually 127.0.0.1:5000)
 
-8. exit and repeat instructions until step 4
-9. terminal: flask run
-10. access the program on a browser with the provided address
-
-
+For future launch of application, you may go through the following steps:
+2 --> 8 --> 9
 
 
 
