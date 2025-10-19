@@ -1,5 +1,29 @@
 <h1>Käyttäjä {{ user.username }}</h1>
 
+<hr />
+{% if session.username %}
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/new_location">Uusi sijainti</a> 
+    <a href="/logout">Kirjaudu ulos</a> 
+  </p>
+  
+  <p>
+    Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a> 
+  </p>
+
+  {% else %}
+  <p>
+    <a href="/">Kotisivu</a> 
+    <a href="/locations">Sijainnit</a> 
+    <a href="/register">Rekisteröinti</a> 
+  </p>
+  
+
+{% endif %}
+
+<hr />
 
 {% if locations %}
 <h2>Lisäämät baarit ({{ locations|length }})</h2>
