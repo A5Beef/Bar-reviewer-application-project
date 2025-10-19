@@ -36,3 +36,4 @@ CREATE TABLE comments(
     user_id INTEGER REFERENCES users(id), 
     location_id INTEGER REFERENCES locations(id)
 );
+

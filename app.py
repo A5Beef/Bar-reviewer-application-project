@@ -335,7 +335,7 @@ def show_user(user_id):
     locations = users.get_locations(user_id)
     return render_template("user.html", user=user, comments=comments, locations=locations)
 
-
+# csrf
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)

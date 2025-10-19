@@ -1,4 +1,4 @@
--- FAKE USERS
+-- USERS
 INSERT INTO users (username, password_hash) VALUES ('Barhater', 'alkomaholitappaa');
 INSERT INTO users (username, password_hash) VALUES ('Beerlover', 'kaljamielessa24');
 INSERT INTO users (username, password_hash) VALUES ('Alcohol_free221', '0percentchanceofdrinking');
