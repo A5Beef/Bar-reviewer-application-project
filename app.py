@@ -23,12 +23,12 @@ def locations():
     results = location.search(query) if query else []
     return render_template("locations.html", locations=locations, query=query, results=results)
 
-# Uusi tietokohde, ja sen tulos
+# new location creation page
 @app.route("/new_location")
 def order():
     return render_template("order.html")
 
-
+# locationpage
 @app.route("/locations/<int:location_id>")
 def show_location(location_id):
     thread = location.get_location(location_id)
@@ -113,8 +113,7 @@ def remove_location(location_id):
             location.remove_location(location_id)
         return redirect("/locations")
 
-
-
+#search function
 @app.route("/search")
 def search():
     query = request.args.get("query")
@@ -122,6 +121,7 @@ def search():
     return render_template("locations.html", query=query, results=results)
 
 
+#creation of new location and its result
 @app.route("/result", methods=["POST"])
 def result(): 
     check_csrf()
@@ -334,6 +334,7 @@ def show_user(user_id):
     comments = users.get_comments(user_id)
     locations = users.get_locations(user_id)
     return render_template("user.html", user=user, comments=comments, locations=locations)
+
 
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
