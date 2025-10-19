@@ -119,7 +119,7 @@
     <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>({{ comment.sent_at }}):
   </p>
   <p>
-    {{ comment.content }}
+    <pre style="white-space: pre-wrap; font-family: inherit; font-size: 1rem; line-height: 1.5;">{{ comment.content | e }}</pre>
   </p>
    <!-- show actions if user made comment-->
   {% if comment.user_id == session.user_id %}

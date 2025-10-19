@@ -185,10 +185,10 @@ def handle_location_form():
             location_id=location_id,
             bar_name=bar_name,
             bar_address=bar_address,
-            happy_hour=1 if 'happy_hour' in extras else 0,
-            student_discount=1 if 'student_discount' in extras else 0,
-            gluten_free=1 if 'gluten_free' in extras else 0,
-            student_patch=1 if 'student_patch' in extras else 0,
+            happy_hour=1 if "happy_hour" in extras else 0,
+            student_discount=1 if "student_discount" in extras else 0,
+            gluten_free=1 if "gluten_free" in extras else 0,
+            student_patch=1 if "student_patch" in extras else 0,
             extra_info=extra_info
         )
         current_location_id = location_id
@@ -197,10 +197,10 @@ def handle_location_form():
             bar_name=bar_name,
             bar_address=bar_address,
             user_id=session["user_id"],
-            happy_hour=1 if 'happy_hour' in extras else 0,
-            student_discount=1 if 'student_discount' in extras else 0,
-            gluten_free=1 if 'gluten_free' in extras else 0,
-            student_patch=1 if 'student_patch' in extras else 0,
+            happy_hour=1 if "happy_hour" in extras else 0,
+            student_discount=1 if "student_discount" in extras else 0,
+            gluten_free=1 if "gluten_free" in extras else 0,
+            student_patch=1 if "student_patch" in extras else 0,
             extra_info=extra_info
         )
         current_location_id = new_location_id
