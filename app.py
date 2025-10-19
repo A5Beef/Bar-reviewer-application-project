@@ -122,8 +122,6 @@ def search():
     return render_template("locations.html", query=query, results=results)
 
 
-
-
 @app.route("/result", methods=["POST"])
 def result(): 
     check_csrf()
@@ -131,131 +129,151 @@ def result():
         if "user_id" not in session:
             return redirect("/login")
 
-        location_id = request.form.get("location_id")
+        # Get and check location info
+        current_location_id, bar_name, bar_address, extras, extra_info = handle_location_form()
 
-        bar_name = request.form.get("bar_name")
-        bar_address= request.form.get("bar_address")
-        extras = request.form.getlist("extra")
-        extra_info = request.form.get("extra_info", "")
+        # Get drink data
+        drinks_data = get_drink_form_data()
 
+        # Create drinks in db
+        drink_ids = create_drinks_in_db()
 
-        if location_id:  
-            location.update_location(
-                location_id=location_id,
-                bar_name=bar_name,
-                bar_address=bar_address,
-                happy_hour=1 if 'happy_hour' in extras else 0,
-                student_discount=1 if 'student_discount' in extras else 0,
-                gluten_free=1 if 'gluten_free' in extras else 0,
-                student_patch=1 if 'student_patch' in extras else 0,
-                extra_info=extra_info
-            )
-            current_location_id = location_id
+        # add drinks to database
+        add_drinks_prices(current_location_id, drink_ids, drinks_data)
 
-        else:
-            new_location_id = location.add_location(
-                bar_name=bar_name,
-                bar_address=bar_address,
-                user_id=session["user_id"],
-                happy_hour=1 if 'happy_hour' in extras else 0,
-                student_discount=1 if 'student_discount' in extras else 0,
-                gluten_free=1 if 'gluten_free' in extras else 0,
-                student_patch=1 if 'student_patch' in extras else 0,
-                extra_info=extra_info
-            )
-            current_location_id = new_location_id
-
-        def check_price_add(location_id, drink_id, drink_size, price):
-            if drink_size and price:
-                location.add_price(location_id, drink_id, drink_size, price)
-
-        # huge chunk of userinput from /order
-        beer = request.form.get("beer")
-        small_beer = request.form.get("small_beer")
-        small_beer_price = request.form.get("small_beer_price")
-        big_beer = request.form.get("big_beer")
-        big_beer_price = request.form.get("big_beer_price")
-        
-        lonkero = request.form.get("lonkero")
-        small_lonkero = request.form.get("small_lonkero")
-        small_lonkero_price = request.form.get("small_lonkero_price")
-        big_lonkero = request.form.get("big_lonkero")
-        big_lonkero_price = request.form.get("big_lonkero_price")
-
-        ananas = request.form.get("ananas")
-        small_ananas = request.form.get("small_ananas")
-        small_ananas_price = request.form.get("small_ananas_price")
-        big_ananas = request.form.get("big_ananas")
-        big_ananas_price = request.form.get("big_ananas_price")
-
-        cider = request.form.get("cider")
-        small_cider = request.form.get("small_cider")
-        small_cider_price = request.form.get("small_cider_price")
-        big_cider = request.form.get("big_cider")
-        big_cider_price = request.form.get("big_cider_price")
-
-        #create drinks (not a good way, later revision maybe)
-        beer_id = location.add_drink(drink_name="beer")
-        lonkero_id = location.add_drink(drink_name="lonkero")
-        ananas_id = location.add_drink(drink_name="ananas")
-        cider_id = location.add_drink(drink_name="cider")
-
-
-        #add drinks to database (later revision..?)
-        if beer:
-            check_price_add(current_location_id, beer_id, small_beer, small_beer_price)
-            check_price_add(current_location_id, beer_id, big_beer, big_beer_price)
-
-        if lonkero:
-            check_price_add(current_location_id, lonkero_id, small_lonkero, small_lonkero_price)
-            check_price_add(current_location_id, lonkero_id, big_lonkero, big_lonkero_price)
-
-        if ananas:
-            check_price_add(current_location_id, ananas_id, small_ananas, small_ananas_price)
-            check_price_add(current_location_id, ananas_id, big_ananas, big_ananas_price)
-
-        if cider:
-            check_price_add(current_location_id, cider_id, small_cider, small_cider_price)
-            check_price_add(current_location_id, cider_id, big_cider, big_cider_price)
-
-
-
+        # Render result
         return render_template(
             "result.html",
             bar_name=bar_name,
             bar_address=bar_address,
             extras=extras,
             extra_info=extra_info,
-            beer=beer,
-            small_beer=small_beer,
-            small_beer_price=small_beer_price,
-            big_beer=big_beer,
-            big_beer_price=big_beer_price,
-            lonkero=lonkero,
-            small_lonkero = small_lonkero,
-            small_lonkero_price=small_lonkero_price,
-            big_lonkero=big_lonkero,
-            big_lonkero_price=big_lonkero_price,
-            ananas=ananas,
-            small_ananas=small_ananas,
-            small_ananas_price=small_ananas_price,
-            big_ananas=big_ananas,
-            big_ananas_price=big_ananas_price,
-            cider=cider,
-            small_cider=small_cider,
-            small_cider_price=small_cider_price,
-            big_cider=big_cider,
-            big_cider_price=big_cider_price,
+            **drinks_data,
             current_location_id=current_location_id
-            )
+        )
     
     except Exception as e:
         print(f"Error: {str(e)}")
-        return "An error occurred", 500
-    
+        return f"Virhe: {str(e)}", 400
+
+
+# helper functions
+
+def handle_location_form():
+    #Get location data and create/update location
+    location_id = request.form.get("location_id")
+    bar_name = request.form.get("bar_name", "").strip()
+    bar_address = request.form.get("bar_address", "").strip()
+
+    if not bar_name or not bar_address:
+        raise ValueError("Nimi ja osoite ovat pakollisia kenttiä!")
+
+    extras = request.form.getlist("extra")
+    extra_info = request.form.get("extra_info", "")
+
+    if location_id:
+        location.update_location(
+            location_id=location_id,
+            bar_name=bar_name,
+            bar_address=bar_address,
+            happy_hour=1 if 'happy_hour' in extras else 0,
+            student_discount=1 if 'student_discount' in extras else 0,
+            gluten_free=1 if 'gluten_free' in extras else 0,
+            student_patch=1 if 'student_patch' in extras else 0,
+            extra_info=extra_info
+        )
+        current_location_id = location_id
+    else:
+        new_location_id = location.add_location(
+            bar_name=bar_name,
+            bar_address=bar_address,
+            user_id=session["user_id"],
+            happy_hour=1 if 'happy_hour' in extras else 0,
+            student_discount=1 if 'student_discount' in extras else 0,
+            gluten_free=1 if 'gluten_free' in extras else 0,
+            student_patch=1 if 'student_patch' in extras else 0,
+            extra_info=extra_info
+        )
+        current_location_id = new_location_id
+
+    return current_location_id, bar_name, bar_address, extras, extra_info
+
+# checks user input
+def safe_price(price_str):
+    try:
+        price = float(price_str)
+        if price < 0:
+            raise ValueError("Price cannot be negative")
+        return price
+    except (ValueError, TypeError):
+        return None
+
+
+def check_price_add(location_id, drink_id, drink_size, price):
+    price_val = safe_price(price)
+    if drink_size and price_val is not None:
+        location.add_price(location_id, drink_id, drink_size, price_val)
+    elif drink_size:
+        raise ValueError(f"Invalid price for drink_id={drink_id}, size={drink_size}: {price}")
+
+#     gets drinks from user
+def get_drink_form_data():
+    return {
+        "beer": request.form.get("beer"),
+        "small_beer": request.form.get("small_beer"),
+        "small_beer_price": request.form.get("small_beer_price"),
+        "big_beer": request.form.get("big_beer"),
+        "big_beer_price": request.form.get("big_beer_price"),
+
+        "lonkero": request.form.get("lonkero"),
+        "small_lonkero": request.form.get("small_lonkero"),
+        "small_lonkero_price": request.form.get("small_lonkero_price"),
+        "big_lonkero": request.form.get("big_lonkero"),
+        "big_lonkero_price": request.form.get("big_lonkero_price"),
+
+        "ananas": request.form.get("ananas"),
+        "small_ananas": request.form.get("small_ananas"),
+        "small_ananas_price": request.form.get("small_ananas_price"),
+        "big_ananas": request.form.get("big_ananas"),
+        "big_ananas_price": request.form.get("big_ananas_price"),
+
+        "cider": request.form.get("cider"),
+        "small_cider": request.form.get("small_cider"),
+        "small_cider_price": request.form.get("small_cider_price"),
+        "big_cider": request.form.get("big_cider"),
+        "big_cider_price": request.form.get("big_cider_price"),
+    }
+
+#    ensure all four drink types exist in DB and return their ids.
+def create_drinks_in_db():
+    return {
+        "beer_id": location.add_drink("beer"),
+        "lonkero_id": location.add_drink("lonkero"),
+        "ananas_id": location.add_drink("ananas"),
+        "cider_id": location.add_drink("cider"),
+    }
+
+#     Add all checked drinks and prices to the database
+def add_drinks_prices(location_id, drink_ids, drinks_data):
+    if drinks_data["beer"]:
+        check_price_add(location_id, drink_ids["beer_id"], drinks_data["small_beer"], drinks_data["small_beer_price"])
+        check_price_add(location_id, drink_ids["beer_id"], drinks_data["big_beer"], drinks_data["big_beer_price"])
+
+    if drinks_data["lonkero"]:
+        check_price_add(location_id, drink_ids["lonkero_id"], drinks_data["small_lonkero"], drinks_data["small_lonkero_price"])
+        check_price_add(location_id, drink_ids["lonkero_id"], drinks_data["big_lonkero"], drinks_data["big_lonkero_price"])
+
+    if drinks_data["ananas"]:
+        check_price_add(location_id, drink_ids["ananas_id"], drinks_data["small_ananas"], drinks_data["small_ananas_price"])
+        check_price_add(location_id, drink_ids["ananas_id"], drinks_data["big_ananas"], drinks_data["big_ananas_price"])
+
+    if drinks_data["cider"]:
+        check_price_add(location_id, drink_ids["cider_id"], drinks_data["small_cider"], drinks_data["small_cider_price"])
+        check_price_add(location_id, drink_ids["cider_id"], drinks_data["big_cider"], drinks_data["big_cider_price"])
+
+
 
 # login and registering
-
 @app.route("/register")
 def register():
     return render_template("register.html")
