@@ -35,19 +35,20 @@ Instructions on installing the program:
    - terminal: cd "path/to/yourfolder"
 4. Create and activate virtual environment:
    - terminal: python3 -m venv venv
+5. Activate virtual environment:
    - terminal: source venv/bin/activate
-5. Install flask if not installed yet:
+6. Install flask if not installed yet:
    - terminal: pip install flask
-6. Create database:
+7. Create database:
    - terminal: sqlite3 database.db < schema.sql
-7. Optionally add example data seed (recommended):
+8. Optionally add example data seed (recommended):
    - terminal: sqlite3 database.db < seed.sql
-8. Run the application:
+9. Run the application:
    - flask run
-9. Access in browser with the provided address (usually 127.0.0.1:5000)
+10. Access in browser with the provided address (usually 127.0.0.1:5000)
 
 For future launch of application, you may go through the following steps:
-2 --> 8 --> 9
+2 --> 5 --> 9 --> 10
 
 
 
